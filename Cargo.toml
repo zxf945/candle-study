@@ -6,8 +6,19 @@ edition = "2024"
 
 [dependencies]
 #提供张量和基本操作
-candle-core = { version = "0.9.1", features = [cuda] }
-#提供神经网络层、优化器和损失函数
-candle-nn = { version = "0.9.1", features = [cuda] }
+[target.'cfg(not(target_os = "macos"))'.dependencies]
+candle-core = { version = "0.9.1", features = ["cuda"] }
+candle-nn = { version = "0.9.1", features = ["cuda"] }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+candle-core = { version = "0.9.1" }
+candle-nn = { version = "0.9.1" }
+
 #用于数据加载时的随机打乱
 rand = "0.9.2"
+
+[profiles.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = true
